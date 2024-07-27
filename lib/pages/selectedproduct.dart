@@ -1,3 +1,4 @@
+import 'package:bigbrewteatech/pages/OrderCustomizationScreen.dart';
 import 'package:flutter/material.dart';
 import '../services/product.dart';
 
@@ -12,15 +13,11 @@ class selectedProduct extends StatefulWidget {
 
 class _selectedProductState extends State<selectedProduct> {
   final Product product;
-  late double totalAmount = product.price;
-  int numberOfOrders = 1;
 
   _selectedProductState({required this.product});
 
   @override
   void initState() {
-    super.initState();
-    totalAmount = product.price;
   }
 
   Widget build(BuildContext context) {
@@ -29,80 +26,74 @@ class _selectedProductState extends State<selectedProduct> {
         title: Text('Orders'),
         backgroundColor: Colors.orange[400],
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            children: [
-              Image.network(product.url),
-              Text(widget.product.productName),
-              Text(widget.product.description),
-            ],
-          ),
-          Row(
+      body: SafeArea(
+        child: Padding(
+          padding:  const EdgeInsets.fromLTRB(10.0, 0, 10.0, 0),
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                '₱ ${totalAmount.toString()}',
-                style:  TextStyle(
-                  fontSize: 20.0,
+              Container(
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(0, 5.0, 0, 0),
+                  child: Center(
+                    child: Image.network(product.url),
+                  ),
                 ),
               ),
-              Row(
-                children: [
-                  IconButton(
-                      onPressed: (){
-                        setState(() {
-                          if(numberOfOrders > 1){
-                            numberOfOrders -= 1;
-                            totalAmount = product.price * numberOfOrders;
-                          }
-                        });
-                      },
-                      icon: Icon(Icons.remove)
-                  ),
-                  Text(
-                    numberOfOrders.toString(),
-                    style: TextStyle(
-                      fontSize: 20.0,
+              Container(
+                child: Column(
+                  children: [
+                    Column(
+                      children: [
+                        Center(
+                          child: Text(widget.product.productName,
+                           style: TextStyle(
+                             fontSize: 20,
+                             fontWeight: FontWeight.bold,
+                           )
+                          ),
+                        ),
+                        SizedBox(height: 10.0,),
+                        Center(
+                          child: Text(widget.product.description,
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  IconButton(
-                      onPressed: (){
-                        setState(() {
-                          numberOfOrders +=1;
-                          totalAmount = product.price * numberOfOrders;
-                        });
-                      },
-                      icon: Icon(Icons.add)
-                  ),
-                ],
+                  ]
+                ),
+              ),
+              const SizedBox(height: 10,),
+              ElevatedButton(
+                onPressed: (){
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: OrderCustomizationScreen(productId: product.productId,));
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.orange[600],
+                    foregroundColor: Colors.grey[200]
+                ),
+                child:  const Row(
+                  children: <Widget>[
+                    Icon(Icons.dashboard_customize),
+                    SizedBox(width: 80,),
+                    Text(
+                      'Customize your order',
+                      style: TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
+                ),
               )
             ],
           ),
-          const SizedBox(height: 10,),
-          ElevatedButton(
-            onPressed: (){
-              Navigator.pushReplacementNamed(context, '/OrderCustomizationScreen');
-            },
-            style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.orange[600],
-                foregroundColor: Colors.grey[200]
-            ),
-            child:  const Row(
-              children: <Widget>[
-                Icon(Icons.dashboard_customize),
-                SizedBox(width: 80,),
-                Text(
-                  'Customize your order',
-                  style: TextStyle(
-                    color: Colors.black,
-                  ),
-                ),
-              ],
-            ),
-          )
-        ],
+        ),
       ),
     );
   }

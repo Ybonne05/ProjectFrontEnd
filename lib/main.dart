@@ -12,16 +12,15 @@ import 'package:bigbrewteatech/pages/checkout.dart';
 import 'package:bigbrewteatech/pages/deliveryaddress.dart';
 
 void main() => runApp(MaterialApp(
-  initialRoute: '/OrderTransactionHistoryScreen',
+  initialRoute: '/menu',
   routes: {
-    '/' : (context) => Dashboard(),
+    '/dashboard' : (context) => Dashboard(),
     '/menu' : (context) => Menu(),
     '/profile' : (context) => Profile(),
     '/signup' : (context) => Signup(),
     '/login' : (context) => Login(),
     '/cart' : (context) => Cart(),
     '/trackorder' : (context) => trackorder(),
-    '/OrderCustomizationScreen' : (context) => OrderCustomizationScreen(),
     '/OrderTransactionHistoryScreen' : (context) => OrderTransactionHistoryScreen(),
     '/checkout' : (context) => checkout(),
     '/deliveryaddress' : (context) => deliveryaddress(),

@@ -11,6 +11,7 @@ class _checkoutState extends State<checkout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar:AppBar(
         title: Text('My Order'),
         backgroundColor: Colors.orange[400],

@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import '../services/user.dart';
+import '../services/User.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -19,9 +19,9 @@ class _LoginState extends State<Login> {
 
   Widget loadingDisplay = CircularProgressIndicator();
 
-  Future<bool> login(User user)async{
+  Future login(User user)async{
     final response = await http.post(
-      Uri.parse('http://10.0.2.2:8080/api/v1/auth/login'),
+      Uri.parse('http://10.0.2.2:8080/api/v1/login'),
       headers: <String, String>{
         'Content-Type' : 'application/json; charset=UTF-8'
       },

@@ -23,13 +23,6 @@ class Menucard extends StatelessWidget {
                 color: Colors.black,
               ),
             ),
-            Text(
-              '${product.price}',
-              style: TextStyle(
-                fontSize: 15.0,
-                color: Colors.grey[800],
-              ),
-            ),
           ],
         ),
       ),

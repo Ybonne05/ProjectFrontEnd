@@ -1,20 +1,53 @@
+import 'dart:convert';
+
+import 'package:bigbrewteatech/services/CustomizationOption.dart';
+import 'package:bigbrewteatech/services/addOns.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class OrderCustomizationScreen extends StatefulWidget {
+  int productId;
+
+  OrderCustomizationScreen({required this.productId});
+
   @override
-  _OrderCustomizationScreenState createState() => _OrderCustomizationScreenState();
+  _OrderCustomizationScreenState createState() => _OrderCustomizationScreenState(productId: productId);
 }
 
 class _OrderCustomizationScreenState extends State<OrderCustomizationScreen> {
+  int productId;
+
+  _OrderCustomizationScreenState({required this.productId});
+
+
+  late Future<List<dynamic>> customization;
+  Future<List<dynamic>> fetchData() async{
+    final response = await http.get(Uri.parse('http://10.0.2.2:8080/api/v1/cart/new')
+    );
+    final data = jsonDecode(response.body);
+    print(data);
+    List transactions = <OrderCustomizationScreen>[];
+    for (var transaction in data){
+      transactions.add(CustomizationOption.fromJson(transaction));
+    }
+    return transactions;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   String? selectedBranch;
   int quantity = 1;
-  String? selectedSugarLevel;
+  String? selectedSugarLevel = '100';
   String? selectedCupSize;
   int nata = 0;
   int coffeejelly = 0;
   int pearl = 0;
   int cheesecake = 0;
   int grassjelly = 0;
+  late double totalamount;
   Map<String, int> addons = {};
 
   List<String> availableBranches = [
@@ -23,7 +56,7 @@ class _OrderCustomizationScreenState extends State<OrderCustomizationScreen> {
   ];
 
   List<String> sugarLevels = [
-    '25%', '50%', '75%', '100%',
+    '25', '50', '75', '100',
   ];
 
   List<String> availableCupSizes = [
@@ -59,7 +92,9 @@ class _OrderCustomizationScreenState extends State<OrderCustomizationScreen> {
 
   double calculateTotal() {
     double addonsTotal = addons.values.fold(0, (previous, current) => previous + (current * 9.0));
+    totalamount = (getBasePrice() * quantity) + addonsTotal;
     return (getBasePrice() * quantity) + addonsTotal;
+
   }
 
   @override
@@ -97,7 +132,7 @@ class _OrderCustomizationScreenState extends State<OrderCustomizationScreen> {
                                 Text('Select Sugar Level:', style: TextStyle(fontSize: 15)),
                                 ...sugarLevels.map((sugar) {
                                   return RadioListTile<String>(
-                                    title: Text(sugar),
+                                    title: Text('$sugar%'),
                                     value: sugar,
                                     groupValue: selectedSugarLevel,
                                     onChanged: (String? value) {
@@ -302,7 +337,22 @@ class _OrderCustomizationScreenState extends State<OrderCustomizationScreen> {
                     children: [
                       ElevatedButton.icon(
                         onPressed: () {
-                          Navigator.pushReplacementNamed(context, '/checkout');
+                          AddOns addOns = AddOns(
+                              nata : nata,
+                              coffeeJelly : coffeejelly,
+                              pearl : pearl,
+                              cheeseCake : cheesecake,
+                              grassJelly : grassjelly);
+
+                          CustomizationOption customizationoption = CustomizationOption(
+                              sugarLevel: int.parse(selectedSugarLevel!),
+                              cupSize: selectedCupSize!,
+                              quantity: quantity,
+                              totalAmount: totalamount,
+                              productId : productId);
+
+
+                          //Navigator.pushReplacementNamed(context, '/checkout');
                         },
                         icon: Icon(Icons.add),
                         label: Text('Add Order'),
@@ -313,7 +363,21 @@ class _OrderCustomizationScreenState extends State<OrderCustomizationScreen> {
                       ),
                       ElevatedButton.icon(
                         onPressed: () {
-                          Navigator.pushReplacementNamed(context, '/cart');
+                          AddOns addOns = AddOns(
+                              nata : nata,
+                              coffeeJelly : coffeejelly,
+                              pearl : pearl,
+                              cheeseCake : cheesecake,
+                              grassJelly : grassjelly);
+
+                          CustomizationOption customizationoption = CustomizationOption(
+                              sugarLevel: int.parse(selectedSugarLevel!),
+                              cupSize: selectedCupSize!,
+                              quantity: quantity,
+                              totalAmount: totalamount,
+                              productId: productId,);
+
+                          //Navigator.pushReplacementNamed(context, '/cart');
                         },
                         icon: Icon(Icons.shopping_cart),
                         label: Text('Add to Cart'),

@@ -1,10 +1,11 @@
 import 'dart:convert';
 
 import 'package:bigbrewteatech/pages/selectedproduct.dart';
+import 'package:bigbrewteatech/services/product.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import '../services/product.dart';
+
 
 class Menu extends StatefulWidget {
   const Menu({super.key});
@@ -17,10 +18,9 @@ class _MenuState extends State<Menu> {
   late Future<List<dynamic>> products;
   Future<List<dynamic>> fetchData()async{
     final response = await http.get(
-        Uri.parse('http://10.0.2.2:8080/api/v1/Product/all')
+        Uri.parse('http://10.0.2.2:8080/api/v1/product/all')
     );
     final data = jsonDecode(response.body);
-    print(data);
     List products = <Product>[];
     for(var product in data){
       products.add(Product.fromJson(product));
@@ -38,6 +38,7 @@ class _MenuState extends State<Menu> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(
           'Menu',
@@ -75,13 +76,6 @@ class _MenuState extends State<Menu> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(products[index].productName),
-                            Text(
-                              products[index].price.toString(),
-                              style: TextStyle(
-                                  color: Colors.brown[100],
-                                  fontSize: 15.0
-                              ),
-                            ),
                           ],
                         ),
                         leading: CircleAvatar(

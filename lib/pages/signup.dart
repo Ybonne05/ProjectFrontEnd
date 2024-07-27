@@ -1,5 +1,10 @@
+import 'dart:convert';
+
+import 'package:bigbrewteatech/services/User.dart';
 import 'package:flutter/material.dart';
 import 'package:roundcheckbox/roundcheckbox.dart';
+import 'package:http/http.dart' as http;
+
 class Signup extends StatefulWidget {
   const Signup({super.key});
 
@@ -16,6 +21,20 @@ class _SignupState extends State<Signup> {
   bool isChecked = true;
 
   bool roundCheckBoxValue = false;
+
+  createAccount(User user) async{
+    final response = await http.post(
+      Uri.parse('http://10.0.2.2:8080/api/v1/register/user'),
+      headers:<String, String>{
+        'Content-Type' : 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'username' : user.username,
+        'email' : user.email,
+        'password' : user.password,
+      }),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -219,6 +238,12 @@ class _SignupState extends State<Signup> {
                           onPressed: isChecked ? null: (){
                             if(formKey.currentState!.validate()){
                               formKey.currentState!.save();
+                              User user = User(
+                                username : name,
+                                email : email,
+                                password: password,
+                              );
+                              createAccount(user);
                               Navigator.pushReplacementNamed(context, '/login');
                             }
                           },
