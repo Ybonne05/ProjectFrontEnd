@@ -67,30 +67,6 @@ class _selectedProductState extends State<selectedProduct> {
                   ]
                 ),
               ),
-              const SizedBox(height: 10,),
-              ElevatedButton(
-                onPressed: (){
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: OrderCustomizationScreen(productId: product.productId,));
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.orange[600],
-                    foregroundColor: Colors.grey[200]
-                ),
-                child:  const Row(
-                  children: <Widget>[
-                    Icon(Icons.dashboard_customize),
-                    SizedBox(width: 80,),
-                    Text(
-                      'Customize your order',
-                      style: TextStyle(
-                        color: Colors.black,
-                      ),
-                    ),
-                  ],
-                ),
-              )
             ],
           ),
         ),

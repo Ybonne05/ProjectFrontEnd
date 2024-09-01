@@ -1,212 +1,202 @@
+import 'package:bigbrewteatech/pages/profileeditscreen.dart';
 import 'package:flutter/material.dart';
-import 'package:gradient_elevated_button/gradient_elevated_button.dart';
-import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
-class Profile extends StatefulWidget {
-  const Profile({super.key});
 
-  @override
-  State<Profile> createState() => _ProfileState();
+void main() {
+  runApp(MyApp());
 }
 
-class _ProfileState extends State<Profile> {
-  int year = 0;
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: UserProfileScreen(),
+      theme: ThemeData(
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+    );
+  }
+}
+
+class UserProfileScreen extends StatefulWidget {
+  @override
+  _UserProfileScreenState createState() => _UserProfileScreenState();
+}
+
+class _UserProfileScreenState extends State<UserProfileScreen> {
+  String _name = 'Frean Catibog';
+  String _age = '23';
+  String _email = 'freanrajascatibog@gmail.com';
+  String _contactNumber = '0963-208-7642';
+  String _address = 'Makina, Calaca Batangas';
+
+  void _updateProfileDetails(
+      String name, String age, String email, String contactNumber, String address) {
+    setState(() {
+      _name = name;
+      _age = age;
+      _email = email;
+      _contactNumber = contactNumber;
+      _address = address;
+    });
+  }
+
+  void _navigateToEditProfile() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ProfileEditScreen(
+          initialName: _name,
+          initialAge: _age,
+          initialEmail: _email,
+          initialContactNumber: _contactNumber,
+          initialAddress: _address,
+        ),
+      ),
+    );
+
+    if (result != null) {
+      _updateProfileDetails(
+        result['name'],
+        result['age'],
+        result['email'],
+        result['contactNumber'],
+        result['address'],
+      );
+    }
+  }
+
+  void _logout() {
+    print('Logged out');
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.orange[600],
       appBar: AppBar(
         title: Text('User Profile'),
-        backgroundColor: Colors.amber[700],
         centerTitle: true,
       ),
-      body: Padding(
-        padding: EdgeInsets.all(20.0),
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/Carousel 1.jpg'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget> [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 50.0, 0, 0),
-                  child: ExpandableCarousel(
-                    options: CarouselOptions(
-                      autoPlay: true,
-                      autoPlayInterval: const Duration(seconds: 1)
-                    ),
-                    items: [
-                      'assets/Carousel 1.jpg',
-                      'assets/Carousel 2.jpg',
-                      'assets/carousel 3.jpg',
-                      'assets/carousel 4.jpeg',
-                    ].map((String imagePath) {
-                      return Builder(
-                        builder: (BuildContext context) {
-                          return Container(
-                              width: MediaQuery.of(context).size.width,
-                              margin: EdgeInsets.symmetric(horizontal: 5.0),
-                              decoration: BoxDecoration(
-                                  color: Colors.pink
-                              ),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(10.0),
-                                child: Image.asset(
-                                  imagePath,
-                                  fit: BoxFit.cover,
-                                ),
-                              )
-                          );
-                        },
-                      );
-                    }).toList(),
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(
+              alignment: Alignment.center,
+              margin: const EdgeInsets.only(bottom: 16.0),
+              child: Column(
+                children: [
+                  CircleAvatar(
+                    radius: 110,
+                    backgroundImage: AssetImage('assets/profile_picture.jpg'),
                   ),
-                ),
-                Divider(
-                  height: 55.0,
-                  color: Colors.brown[800],
-                  thickness: 5.0,
-                ),
-                Row(
-                  children: [
-                    Icon(
-                      Icons.person_2,
-                      color:Colors.grey[800],
-                    ),
-                    SizedBox(width: 3.0,),
-                    Text(
-                      'NAME',
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.white,
-                        letterSpacing: 2.0,
-                      ),
-                    ),
-                  ],
-                ),
-                Text(
-                  'Trixie Anne Legaspi Catibog',
-                  style: TextStyle(
+                  SizedBox(height: 10),
+                  Text(
+                    'Copyright @BigBrewTeaTech2024',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      fontSize: 20.0
+                    ),
                   ),
-                ),
-                SizedBox(height: 30.0,),
-                Row(
-                  children: [
-                    Icon(
-                      Icons.calendar_month_sharp,
-                      color: Colors.grey[800],
-                    ),
-                    SizedBox(width: 4.0,),
-                    Text(
-                      'AGE',
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.white,
-                        letterSpacing: 2.0,
-                      ),
-                    ),
-                  ],
-                ),
-                Text(
-                  '$year Years Old',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    fontSize: 20.0,
-                  ),
-                ),
-                SizedBox(height: 30.0,),
-                Row(
-                  children: [
-                    Icon(
-                      Icons.email_sharp,
-                      color: Colors.grey[800],
-                    ),
-                    SizedBox(width: 4.0,),
-                    Text(
-                      'EMAIL',
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.white,
-                        letterSpacing: 2.0,
-                      ),
-                    ),
-                  ],
-                ),
-                Text(
-                  'trixieannlegaspicatibog@gmail.com',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    fontSize: 20.0,
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                ElevatedButton(
-                  onPressed: (){
-                    setState(() {
-                      year +=1;
-                    });
-                  },
-                  child: Text('Add Year'),
-                ),
-                GradientElevatedButton(
-                  onPressed: () {
-                  Navigator.pushReplacementNamed(context, '/login');
-                  },
-                  style: GradientElevatedButton.styleFrom(
-                    gradient: const LinearGradient(colors: [
-                      Color.fromARGB(255, 129, 133, 127),
-                      Color.fromARGB(225, 145, 178, 195),
+            SizedBox(height: 10),
+            Container(
+              padding: const EdgeInsets.all(16.0),
+              decoration: BoxDecoration(
+                color: Colors.brown[900]?.withOpacity(0.7),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Icon(Icons.person, color: Colors.white),
+                      SizedBox(width: 10),
+                      Text(
+                        'Name: $_name',
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                      ),
                     ],
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                    ),
                   ),
-                  child: const Text("LOG OUT YOUR ACCOUNT"),
-
-                ),
-              ],
+                  SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Icon(Icons.calendar_today, color: Colors.white),
+                      SizedBox(width: 10),
+                      Text(
+                        'Age: $_age',
+                        style: TextStyle(fontSize: 18, color: Colors.white),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Icon(Icons.email, color: Colors.white),
+                      SizedBox(width: 10),
+                      Text(
+                        'Email: $_email',
+                        style: TextStyle(fontSize: 18, color: Colors.white),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Icon(Icons.phone, color: Colors.white),
+                      SizedBox(width: 10),
+                      Text(
+                        'Contact: $_contactNumber',
+                        style: TextStyle(fontSize: 18, color: Colors.white),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Icon(Icons.home, color: Colors.white),
+                      SizedBox(width: 10),
+                      Text(
+                        'Address: $_address',
+                        style: TextStyle(fontSize: 18, color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 30),
+            ElevatedButton.icon(
+              onPressed: _navigateToEditProfile,
+              icon: Icon(Icons.edit),
+              label: Text('Update Your Profile'),
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size(double.infinity, 50),
+                backgroundColor: Colors.black,
+              ),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton.icon(
+              onPressed: _logout,
+              icon: Icon(Icons.exit_to_app),
+              label: Text('Log Out'),
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size(double.infinity, 50),
+                backgroundColor: Colors.black,
+              ),
             ),
           ],
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        onTap: (int val){
-          switch(val){
-            case 0:
-              Navigator.pushNamed(context, '/menu');
-              break;
-            case 1:
-              Navigator.pushNamed(context, '/cart');
-              break;
-            case 2:
-              Navigator.pushNamed(context, '/profile');
-              break;
-          }
-        },
-        currentIndex: 2,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.fastfood),
-            label: 'Menu',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.add_shopping_cart_sharp),
-            label: 'Cart',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
       ),
     );
   }
